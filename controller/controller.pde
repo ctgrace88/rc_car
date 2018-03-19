@@ -1,11 +1,11 @@
-// Bluetooth?
-//   BtSerial, bluetoothDesktop
+import processing.serial.*;
 
 import controlP5.*;
 import bluetoothDesktop.*;
 
 ControlP5 cp5;
 Slider speedSlider;
+
 PImage left;
 PImage up;
 PImage right;
@@ -15,16 +15,18 @@ color fillU;
 color fillR;
 color fillD;
 int[] keyLookup = {LEFT, UP, RIGHT, DOWN};
-boolean[] dir = {false,false,false,false};
+boolean[] dir = {false,false,false,false};    // LEFT, UP, RIGHT, DOWN
+byte[] send = new byte[5];    // {Speed (0-10), Left, Forward, Right, Reverse} 
 
-// Setup bluetooth connection
-Bluetooth bt;
-String statusMsg = "inactive";
-Service[] services = new Service[0];
-Device[] devices = new Device[0];
-Client[] clients = new Client[0];
+Serial myPort;  // Create object from Serial class
+String val;     // Data received from the serial port
 
 void setup() {
+  // bluetooth
+  printArray(Serial.list());
+  String portName = Serial.list()[2];
+  myPort = new Serial(this, portName, 9600);
+  
   size(800,600);
   fillL = fillU = fillR = fillD = 255;
   background(#3D3D3B);
@@ -37,26 +39,12 @@ void setup() {
   cp5 = new ControlP5(this);
   
   // addSlider(theName, theMin, theMax, theDefaultValue, theX, theY, theW, theH)
-  speedSlider = cp5.addSlider("%", 0,100, 0, width/4, 100, width/2, 30);
-  speedSlider.setNumberOfTickMarks(21);
+  speedSlider = cp5.addSlider("", 0,10, 0, width/4, 100, width/2, 30);
+  speedSlider.setNumberOfTickMarks(11);
   speedSlider.setColorForeground(#CC1310);
   speedSlider.setColorActive(#CC1310);
   speedSlider.setColorBackground(#9EA39A);
   speedSlider.setColorValue(#000000);
-  
-  // bluetooth
-  try {
-    bt = new Bluetooth(this, 0x0003); // RFCOMM
-    
-    // Start a Service
-    bt.start("simpleService");
-    bt.find();
-    statusMsg = "starting search";
-  }
-  catch (RuntimeException e) {
-    statusMsg = "bluetooth off?";
-    println(e);
-  }
 }
 
 void draw() {
@@ -82,8 +70,46 @@ void draw() {
   image(down, width/2, height-150, 100, 100);
   updateDir();
   
-  // bluetooth
+  //// bluetooth
+  send[0] = 0;
+  send[1] = 0;
+  send[2] = 0;
+  send[3] = 0;
+  send[4] = 0;
   
+  if (dir[0]) 
+  {                          
+    send[1] = 1;    
+  }
+  else 
+  {
+    
+  }
+  if (dir[1]) 
+  {                           
+    send[2] = 1;        
+  }
+  else 
+  {  
+    
+  }
+  if (dir[2]) 
+  {                          
+    send[3] = 1;        
+  }
+  else 
+  {                          
+           
+  }
+  if (dir[3]) 
+  {                          
+    send[4] = 1;       
+  }
+  else 
+  {                          
+          
+  }
+  myPort.write(send);
 }
 
 void updateDir() {
