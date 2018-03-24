@@ -74,7 +74,7 @@ void draw() {
   updateDir();
   
   // Send bluetooth message
-  send[0] = (byte)cp5.getController("%").getValue();
+  send[0] = (byte)cp5.getController("%").getValue();    
   
   if (dir[0]) 
   {                          
