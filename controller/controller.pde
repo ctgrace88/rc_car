@@ -1,7 +1,10 @@
-import processing.serial.*;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Purpose: A GUI designed to communicate with an Arduino through bluetooth to operate a rc car. //
+// Author: Connor Grace                                                                          //
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
+import processing.serial.*;
 import controlP5.*;
-import bluetoothDesktop.*;
 
 ControlP5 cp5;
 Slider speedSlider;
@@ -39,7 +42,7 @@ void setup() {
   cp5 = new ControlP5(this);
   
   // addSlider(theName, theMin, theMax, theDefaultValue, theX, theY, theW, theH)
-  speedSlider = cp5.addSlider("", 0,10, 0, width/4, 100, width/2, 30);
+  speedSlider = cp5.addSlider("%", 0,10, 0, width/4, 100, width/2, 30);
   speedSlider.setNumberOfTickMarks(11);
   speedSlider.setColorForeground(#CC1310);
   speedSlider.setColorActive(#CC1310);
@@ -70,12 +73,8 @@ void draw() {
   image(down, width/2, height-150, 100, 100);
   updateDir();
   
-  //// bluetooth
-  send[0] = 0;
-  send[1] = 0;
-  send[2] = 0;
-  send[3] = 0;
-  send[4] = 0;
+  // Send bluetooth message
+  send[0] = (byte)cp5.getController("%").getValue();
   
   if (dir[0]) 
   {                          
@@ -83,7 +82,7 @@ void draw() {
   }
   else 
   {
-    
+    send[1] = 0;
   }
   if (dir[1]) 
   {                           
@@ -91,7 +90,7 @@ void draw() {
   }
   else 
   {  
-    
+    send[2] = 0;
   }
   if (dir[2]) 
   {                          
@@ -99,7 +98,7 @@ void draw() {
   }
   else 
   {                          
-           
+    send[3] = 0;       
   }
   if (dir[3]) 
   {                          
@@ -107,7 +106,7 @@ void draw() {
   }
   else 
   {                          
-          
+    send[4] = 0;      
   }
   myPort.write(send);
 }
