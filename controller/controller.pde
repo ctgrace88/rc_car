@@ -23,13 +23,12 @@ boolean[] dir = {false,false,false,false};    // LEFT, UP, RIGHT, DOWN
 byte[] send = new byte[5];    // {Speed (0-10), Left, Forward, Right, Reverse} 
 
 Serial myPort;  // Create object from Serial class
-String val;     // Data received from the serial port
 
 void setup() {
   // bluetooth
-  printArray(Serial.list());
-  //String portName = Serial.list()[2];
-  //myPort = new Serial(this, portName, 9600);
+  //printArray(Serial.list());                  // lists the bluetooth ports that are open  
+  String portName = Serial.list()[2];           // change the value in the square brackets to bluetooth port number that is outgoing to the hc-05 module
+  myPort = new Serial(this, portName, 9600);    // initialize myPort as a serial bluetooth connection to the hc-05 module        
   
   size(800,600);
   fillL = fillU = fillR = fillD = 255;
@@ -85,6 +84,7 @@ void draw() {
   {
     send[1] = 0;
   }
+  
   if (dir[1]) 
   {                           
     send[2] = 1;        
@@ -93,6 +93,7 @@ void draw() {
   {  
     send[2] = 0;
   }
+  
   if (dir[2]) 
   {                          
     send[3] = 1;        
@@ -101,6 +102,7 @@ void draw() {
   {                          
     send[3] = 0;       
   }
+  
   if (dir[3]) 
   {                          
     send[4] = 1;       
@@ -109,7 +111,8 @@ void draw() {
   {                          
     send[4] = 0;      
   }
-  //myPort.write(send);
+  
+  myPort.write(send);    // send data through bluetooth
 }
 
 void updateDir() {
