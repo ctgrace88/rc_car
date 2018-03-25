@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Purpose: A GUI designed to communicate with an Arduino through bluetooth to operate a rc car. //
-// Author: Connor Grace                                                                          //
-///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Purpose: A GUI designed to communicate with an Arduino from a computer through bluetooth to operate a rc car. //
+// Author: Connor Grace                                                                                          //
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-import processing.serial.*;
-import controlP5.*;
+
+import processing.serial.*;    // Library for serial bluetooth communication
+import controlP5.*;            // Library for the slider bar
 
 ControlP5 cp5;
 Slider speedSlider;
@@ -27,8 +28,8 @@ String val;     // Data received from the serial port
 void setup() {
   // bluetooth
   printArray(Serial.list());
-  String portName = Serial.list()[2];
-  myPort = new Serial(this, portName, 9600);
+  //String portName = Serial.list()[2];
+  //myPort = new Serial(this, portName, 9600);
   
   size(800,600);
   fillL = fillU = fillR = fillD = 255;
@@ -42,8 +43,8 @@ void setup() {
   cp5 = new ControlP5(this);
   
   // addSlider(theName, theMin, theMax, theDefaultValue, theX, theY, theW, theH)
-  speedSlider = cp5.addSlider("%", 0,10, 0, width/4, 100, width/2, 30);
-  speedSlider.setNumberOfTickMarks(11);
+  speedSlider = cp5.addSlider("%", 0,100, 0, width/4, 100, width/2, 30);
+  speedSlider.setNumberOfTickMarks(21);
   speedSlider.setColorForeground(#CC1310);
   speedSlider.setColorActive(#CC1310);
   speedSlider.setColorBackground(#9EA39A);
@@ -108,7 +109,7 @@ void draw() {
   {                          
     send[4] = 0;      
   }
-  myPort.write(send);
+  //myPort.write(send);
 }
 
 void updateDir() {
