@@ -3,6 +3,7 @@
 // Authors: Connor Grace, Emily Sior                                      //
 ////////////////////////////////////////////////////////////////////////////
 
+#include <Servo.h>
 
 byte state[] = {0,0,0,0,0};   // store inputs from GUI controller
 int stateLoop = 0;            // iterater for state array

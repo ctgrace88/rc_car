@@ -27,7 +27,7 @@ Serial myPort;  // Create object from Serial class
 void setup() {
   // bluetooth
   //printArray(Serial.list());                  // lists the bluetooth ports that are open  
-  String portName = Serial.list()[2];           // change the value in the square brackets to bluetooth port number that is outgoing to the hc-05 module
+  String portName = Serial.list()[1];           // change the value in the square brackets to bluetooth port number that is outgoing to the hc-05 module
   myPort = new Serial(this, portName, 9600);    // initialize myPort as a serial bluetooth connection to the hc-05 module        
   
   size(800,600);
