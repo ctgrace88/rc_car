@@ -20,14 +20,14 @@ color fillR;
 color fillD;
 int[] keyLookup = {LEFT, UP, RIGHT, DOWN};
 boolean[] dir = {false,false,false,false};    // LEFT, UP, RIGHT, DOWN
-byte[] send = new byte[5];    // {Speed (0-10), Left, Forward, Right, Reverse} 
+byte[] send = new byte[5];    // {Speed, Left, Forward, Right, Reverse} 
 
 Serial myPort;  // Create object from Serial class
 
 void setup() {
   // bluetooth
-  //printArray(Serial.list());                  // lists the bluetooth ports that are open  
-  String portName = Serial.list()[1];           // change the value in the square brackets to bluetooth port number that is outgoing to the hc-05 module
+  printArray(Serial.list());                    // lists the bluetooth ports that are open  
+  String portName = Serial.list()[2];           // change the value in the square brackets to bluetooth port number that is outgoing to the hc-05 module
   myPort = new Serial(this, portName, 9600);    // initialize myPort as a serial bluetooth connection to the hc-05 module        
   
   size(800,600);
@@ -74,6 +74,10 @@ void draw() {
   updateDir();
   
   // Send bluetooth message
+  for (int i = 0; i < 5; i++){
+    send[i] = 0;
+  }
+  
   send[0] = (byte)cp5.getController("%").getValue();    
   
   if (dir[0]) 
