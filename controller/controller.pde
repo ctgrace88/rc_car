@@ -10,16 +10,16 @@ import controlP5.*;            // Library for the slider bar
 ControlP5 cp5;
 Slider speedSlider;
 
-PImage left;
-PImage up;
-PImage right;
-PImage down;
+PImage left;      // Store left arrow image
+PImage up;        // Store up arrow image
+PImage right;     // Store right arrow image
+PImage down;      // Store down arrow image
 color fillL;
 color fillU;
 color fillR;
 color fillD;
 int[] keyLookup = {LEFT, UP, RIGHT, DOWN};
-boolean[] dir = {false,false,false,false};    // LEFT, UP, RIGHT, DOWN
+boolean[] dir = {false,false,false,false};    // Stores what arrow keys are currently pushed - LEFT, UP, RIGHT, DOWN
 byte[] send = new byte[5];    // {Speed, Left, Forward, Right, Reverse} 
 
 Serial myPort;  // Create object from Serial class
@@ -30,7 +30,7 @@ void setup() {
   String portName = Serial.list()[2];           // change the value in the square brackets to bluetooth port number that is outgoing to the hc-05 module
   myPort = new Serial(this, portName, 9600);    // initialize myPort as a serial bluetooth connection to the hc-05 module        
   
-  size(800,600);
+  size(800,600);      // Set size of window to 800 x 600 px
   fillL = fillU = fillR = fillD = 255;
   background(#3D3D3B);
   
@@ -41,6 +41,7 @@ void setup() {
   
   cp5 = new ControlP5(this);
   
+  // Create the speed slider
   // addSlider(theName, theMin, theMax, theDefaultValue, theX, theY, theW, theH)
   speedSlider = cp5.addSlider("%", 0,100, 0, width/4, 100, width/2, 30);
   speedSlider.setNumberOfTickMarks(21);
@@ -56,6 +57,7 @@ void draw() {
   textAlign(CENTER, CENTER);
   text("Speed", width/2, 50);
   
+  // Draw arrow key boxes
   rectMode(CENTER);
   fill(fillL);
   rect((width/2)-125, height-150, 100, 100, 10);
@@ -66,12 +68,14 @@ void draw() {
   fill(fillD);
   rect(width/2, height-150, 100, 100, 10);
   
+  // Put arrow key images in their boxes
   imageMode(CENTER);
   image(left, (width/2)-125, height-150, 100, 100);
   image(up, width/2, height-275, 100, 100);
   image(right, (width/2)+125, height-150, 100, 100);
   image(down, width/2, height-150, 100, 100);
-  updateDir();
+  
+  updateDir();        // Call updateDir method
   
   // Send bluetooth message
   for (int i = 0; i < 5; i++){
@@ -119,6 +123,7 @@ void draw() {
   myPort.write(send);    // send data through bluetooth
 }
 
+// Method to fill in the arrow key boxes red if they are currently pressed
 void updateDir() {
   if (dir[0])
     fillL = #FF5D4E;
@@ -146,6 +151,7 @@ void keyReleased(){
   keys(false);
 }
 
+// Method to update boolean array dir if a key is pressed or not
 void keys(boolean pressed){
    for (int i = 0; i < keyLookup.length; i++){
      if (keyCode == keyLookup[i])
